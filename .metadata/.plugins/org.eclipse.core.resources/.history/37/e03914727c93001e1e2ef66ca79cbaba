@@ -1,0 +1,73 @@
+package com.example.demo.serviceimpl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.exception.StudentAlreadyExistsException;
+import com.example.demo.model.Student;
+import com.example.demo.repository.StudentRepo;
+import com.example.demo.service.StudentService;
+
+
+
+@Service
+
+public class StudentserviceImp implements StudentService {
+ @Autowired
+	 StudentRepo repo;
+	@Override
+	public Student addstudent(Student s) {
+		if(StudentAlreadyExists(s.getEmail()))
+		{
+			throw new StudentAlreadyExistsException(s.getEmail()+"already Exists!!");
+			
+		}
+		return repo.save(s);
+			}
+
+	
+
+
+
+	@Override
+	public List<Student> getStudents() {
+		return repo.findAll();
+		
+	}
+
+	@Override
+	public Student updateStudent(Student s, Long id) {
+		
+		Student s1=repo.findById(s.getId()).orElse(null);
+		if(s1!=null) {
+			s1.setFirstName(s.getFirstName());
+			s1.setLastName(s.getLastName());
+			s1.setEmail(s.getEmail());
+			s1.setDeparment(s.getDeparment());
+			return repo.save(s1) ;
+		}
+				
+		else {
+			throw new StudentAlreadyExistsException("Student not Exists");
+		}
+	}
+
+	@Override
+	public Student getStudentByID(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deletestudent(long id) {
+		
+		
+	}
+private boolean StudentAlreadyExists(String email) {
+		
+		return repo.findByEmail(email).isPresent() ;
+	}
+
+}

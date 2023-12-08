@@ -1,0 +1,60 @@
+package com.example.demo.serviceimpl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.exception.StudentAlreadyExistsException;
+import com.example.demo.model.Student;
+import com.example.demo.repository.StudentRepo;
+import com.example.demo.service.StudentService;
+
+import lombok.Data;
+
+@Service
+@Data
+public class StudentserviceImp implements StudentService {
+ @Autowired
+	 StudentRepo repo;
+	@Override
+	public Student addstudent(Student s) {
+		if(StudentAlreadyExists(s.getEmail()))
+		{
+			throw new StudentAlreadyExistsException(s.getEmail()+"already Exists");
+			
+		}
+		return repo.save(s);
+			}
+
+	
+
+	@Override
+	public List<Student> getStudents() {
+		return repo.findAll();
+		
+	}
+
+	@Override
+	public Student updateStudent(Student s, Long id) {
+		
+		return null;
+	}
+
+	@Override
+	public Student getStudentByID(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deletestudent(long id) {
+		
+		
+	}
+private boolean StudentAlreadyExistsException(String email) {
+		
+		return repo.findByEmail(email).isPresent() ;
+	}
+
+}

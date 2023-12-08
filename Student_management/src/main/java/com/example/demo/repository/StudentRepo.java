@@ -1,0 +1,21 @@
+package com.example.demo.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.demo.model.Student;
+
+public interface StudentRepo extends JpaRepository<Student, Long> {
+
+	List<Student> findAll();
+
+//	Student save(Student s);
+
+	
+	Optional<Student> findByEmail(String email);
+
+	
+
+}
